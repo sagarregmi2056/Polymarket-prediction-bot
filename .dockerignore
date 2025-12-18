@@ -1,6 +1,6 @@
 # Rust build artifacts
 target/
-Cargo.lock
+# Cargo.lock - Keep this for reproducible builds
 
 # Environment files (should be passed via docker-compose or -e flags)
 .env

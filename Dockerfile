@@ -1,6 +1,6 @@
 # Multi-stage build for Polymarket Arbitrage Bot
 # Stage 1: Build
-FROM rust:1.75-slim as builder
+FROM rust:latest as builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
@@ -12,11 +12,13 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy dependency files first (for better caching)
-COPY Cargo.toml Cargo.lock ./
+COPY Cargo.toml ./
 
 # Create a dummy src/main.rs to build dependencies
+# Cargo.lock will be generated automatically if missing
 RUN mkdir src && \
     echo "fn main() {}" > src/main.rs && \
+    cargo generate-lockfile 2>/dev/null || true && \
     cargo build --release && \
     rm -rf src
 

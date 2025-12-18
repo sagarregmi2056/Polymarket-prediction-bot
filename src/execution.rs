@@ -10,7 +10,7 @@ use tracing::{info, warn, error};
 
 use crate::polymarket_clob::SharedAsyncClient;
 use crate::types::{
-    ArbType, MarketPair,
+    MarketPair,
     FastExecutionRequest, GlobalState,
     cents_to_price,
 };

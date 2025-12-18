@@ -104,12 +104,13 @@ impl DiscoveryClient {
         match cached {
             Some(cache) if !cache.is_expired() => {
                 // Cache is fresh - use it directly
+                let pair_count = cache.pairs.len();
                 info!("📂 Loaded {} pairs from cache (age: {}s)",
-                      cache.pairs.len(), cache.age_secs());
+                      pair_count, cache.age_secs());
                 return DiscoveryResult {
                     pairs: cache.pairs,
                     kalshi_events_found: 0,  // From cache (kept for compatibility)
-                    poly_matches: cache.pairs.len(),
+                    poly_matches: pair_count,
                     poly_misses: 0,
                     errors: vec![],
                 };

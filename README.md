@@ -239,12 +239,25 @@ docker-compose ps
 
 ## Obtaining Credentials
 
-### Polymarket
+**📖 [Complete Credentials Guide](./CREDENTIALS_GUIDE.md)** - Detailed step-by-step instructions
 
-1. Create or import an Ethereum wallet (MetaMask, etc.)
-2. Export the private key (include `0x` prefix)
-3. Fund your wallet on Polygon network with USDC
-4. The wallet address is your `POLY_FUNDER`
+### Quick Summary
+
+You need **TWO** things from the **SAME** MetaMask wallet on **Polygon network**:
+
+1. **Private Key** (`POLY_PRIVATE_KEY`) - Export from MetaMask
+   - Format: `0x` + 64 hex characters (66 total)
+   - Get it: MetaMask → Account Details → Export Private Key
+
+2. **Wallet Address** (`POLY_FUNDER`) - Your Polygon wallet address
+   - Format: `0x` + 40 hex characters (42 total)
+   - Get it: Copy address from MetaMask (on Polygon network)
+
+**Important**:
+- ✅ Both must be from the **same wallet**
+- ✅ Wallet must be on **Polygon Mainnet** (chain ID 137)
+- ✅ Wallet needs **USDC** (not MATIC) for trading
+- ✅ Private key must start with `0x` prefix
 
 ---
 
