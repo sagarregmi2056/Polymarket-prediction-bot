@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  polymarket-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: polymarket-arb-bot
+    restart: unless-stopped
+    
+    # Environment variables
+    # Note: For production, use secrets or env_file instead of hardcoding
+    environment:
+      # Logging
+      - RUST_LOG=${RUST_LOG:-info}
+      
+      # Bot configuration
+      - DRY_RUN=${DRY_RUN:-1}
+      - ARB_THRESHOLD=${ARB_THRESHOLD:-0.995}
+      - FORCE_DISCOVERY=${FORCE_DISCOVERY:-0}
+      - PRICE_LOGGING=${PRICE_LOGGING:-0}
+      
+      # Test mode
+      - TEST_ARB=${TEST_ARB:-0}
+      - TEST_ARB_TYPE=${TEST_ARB_TYPE:-poly_only}
+      
+      # Circuit breaker
+      - CB_ENABLED=${CB_ENABLED:-true}
+      - CB_MAX_POSITION_PER_MARKET=${CB_MAX_POSITION_PER_MARKET:-100}
+      - CB_MAX_TOTAL_POSITION=${CB_MAX_TOTAL_POSITION:-500}
+      - CB_MAX_DAILY_LOSS=${CB_MAX_DAILY_LOSS:-5000}
+      - CB_MAX_CONSECUTIVE_ERRORS=${CB_MAX_CONSECUTIVE_ERRORS:-5}
+      - CB_COOLDOWN_SECS=${CB_COOLDOWN_SECS:-60}
+      
+      # Polymarket credentials (REQUIRED - set these!)
+      - POLY_PRIVATE_KEY=${POLY_PRIVATE_KEY}
+      - POLY_FUNDER=${POLY_FUNDER}
+      
+      # Market discovery
+      - POLY_MARKET_SLUGS=${POLY_MARKET_SLUGS:-}
+    
+    # Mount volumes for persistent data
+    volumes:
+      # Persist position tracking
+      - ./data/positions.json:/app/positions.json:rw
+      # Persist discovery cache
+      - ./data/.discovery_cache.json:/app/.discovery_cache.json:rw
+      # Persist CLOB cache
+      - ./data/.clob_market_cache.json:/app/.clob_market_cache.json:rw
+      # Logs (optional)
+      - ./logs:/app/logs:rw
+    
+    # Health check (optional - checks if process is running)
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "arb-bot"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Resource limits (adjust based on your needs)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+

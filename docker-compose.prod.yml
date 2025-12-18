@@ -1,0 +1,40 @@
+version: '3.8'
+
+# Production docker-compose override
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+
+services:
+  polymarket-bot:
+    # Use secrets for sensitive data in production
+    secrets:
+      - poly_private_key
+      - poly_funder
+    
+    environment:
+      # Override for production
+      - DRY_RUN=0
+      - RUST_LOG=info
+      
+      # Read secrets from files
+      - POLY_PRIVATE_KEY_FILE=/run/secrets/poly_private_key
+      - POLY_FUNDER_FILE=/run/secrets/poly_funder
+    
+    # Restart policy
+    restart: always
+    
+    # More restrictive resource limits for production
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 512M
+
+secrets:
+  poly_private_key:
+    file: ./secrets/poly_private_key.txt
+  poly_funder:
+    file: ./secrets/poly_funder.txt
+

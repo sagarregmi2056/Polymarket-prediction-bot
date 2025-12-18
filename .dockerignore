@@ -1,0 +1,50 @@
+# Rust build artifacts
+target/
+Cargo.lock
+
+# Environment files (should be passed via docker-compose or -e flags)
+.env
+.env.keys
+*.key
+*.pem
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation (optional, can include if needed)
+# *.md
+
+# Test artifacts
+*.profdata
+*.pdb
+
+# Cache files
+.discovery_cache.json
+positions.json
+.clob_market_cache.json
+
+# Python cache (for scripts)
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
